@@ -35,7 +35,7 @@ import org.cirdles.calamari.prawn.PrawnFileFilter;
  */
 public class CalamariUI extends javax.swing.JFrame {
 
-    private final transient PrawnFileHandler prawnFileHandler;
+    private final  PrawnFileHandler prawnFileHandler;
     private boolean normalizeIonCountsToSBM;
     private boolean useLinearRegressionToCalculateRatios;
 

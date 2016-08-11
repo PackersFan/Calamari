@@ -85,32 +85,28 @@ public class Calamari {
         if (listOfPrawnFiles != null) {
             File exampleFolder = new File("ExamplePrawnXMLFiles");
             boolean success = exampleFolder.mkdir();
-            if (success) {
-                try {
-                    List<String> fileNames = Files.readAllLines(listOfPrawnFiles, ISO_8859_1);
-                    for (int i = 0; i < fileNames.size(); i++) {
-                        // test for empty string
-                        if (fileNames.get(i).trim().length() > 0) {
-                            File prawnFileResource = prawnFileResourceExtractor.extractResourceAsFile(fileNames.get(i));
-                            File prawnFile = new File(exampleFolder.getCanonicalPath() + File.separator + fileNames.get(i));
-                            System.out.println("PrawnFile added: " + fileNames.get(i));
-                            boolean success2 = prawnFileResource.renameTo(prawnFile);
-                        }
+            try {
+                List<String> fileNames = Files.readAllLines(listOfPrawnFiles, ISO_8859_1);
+                for (int i = 0; i < fileNames.size(); i++) {
+                    // test for empty string
+                    if (fileNames.get(i).trim().length() > 0) {
+                        File prawnFileResource = prawnFileResourceExtractor.extractResourceAsFile(fileNames.get(i));
+                        File prawnFile = new File(exampleFolder.getCanonicalPath() + File.separator + fileNames.get(i));
+                        System.out.println("PrawnFile added: " + fileNames.get(i));
+                        success = prawnFileResource.renameTo(prawnFile);
                     }
-
-                    // point to directory, but no default choice
-                    prawnFileHandler.setCurrentPrawnFileLocation(exampleFolder.getCanonicalPath());
-                } catch (IOException iOException) {
                 }
+
+                // point to directory, but no default choice
+                prawnFileHandler.setCurrentPrawnFileLocation(exampleFolder.getCanonicalPath());
+            } catch (IOException iOException) {
             }
         }
 
         // Set up default folder for reports
         File defaultCalamariReportsFolder = new File("CalamariReports_v" + VERSION);
         boolean success = defaultCalamariReportsFolder.mkdir();
-        if (success){
-            prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(defaultCalamariReportsFolder);
-        }
+        prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(defaultCalamariReportsFolder);
 
         /* Set the Metal look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -169,7 +169,7 @@ public class PrawnFileHandler {
         if (isURL){
             boolean success = pathToLocalPrawnXMLFile.toFile().delete();
             if (! success){
-                throw new IOException("Could not delete temp file tempURLtoXML.xml");
+                throw new IOException("Unable to delete temp file tempURLtoXML.xml");
             }
         }
 
