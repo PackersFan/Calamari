@@ -89,25 +89,27 @@ public class CalamariReportsEngine {
                     + reportParameterValues
                     + File.separator;
             File reportsFolder = new File(folderToWriteCalamariReportsPath);
-            reportsFolder.mkdirs();
+            boolean success = reportsFolder.mkdirs();
 
-            prepSpeciesReportFiles(firstShrimpFraction);
-            prepRatiosReportFiles(firstShrimpFraction);
+            if (success) {
+                prepSpeciesReportFiles(firstShrimpFraction);
+                prepRatiosReportFiles(firstShrimpFraction);
 
-            for (int f = 0; f < shrimpFractions.size(); f++) {
-                ShrimpFraction shrimpFraction = shrimpFractions.get(f);
-                shrimpFraction.setSpotNumber(f + 1);
-                reportTotalIonCountsAtMass(shrimpFraction);
-                reportTotalSBMCountsAtMass(shrimpFraction);
-                reportTotalCountsAtTimeStampAndTrimMass(shrimpFraction);
-                reportTotalCountsPerSecondPerSpeciesPerAnalysis(shrimpFraction);
-                reportWithinSpotRatiosAtInterpolatedTimes(shrimpFraction);
-                reportMeanRatiosPerSpot(shrimpFraction);
+                for (int f = 0; f < shrimpFractions.size(); f++) {
+                    ShrimpFraction shrimpFraction = shrimpFractions.get(f);
+                    shrimpFraction.setSpotNumber(f + 1);
+                    reportTotalIonCountsAtMass(shrimpFraction);
+                    reportTotalSBMCountsAtMass(shrimpFraction);
+                    reportTotalCountsAtTimeStampAndTrimMass(shrimpFraction);
+                    reportTotalCountsPerSecondPerSpeciesPerAnalysis(shrimpFraction);
+                    reportWithinSpotRatiosAtInterpolatedTimes(shrimpFraction);
+                    reportMeanRatiosPerSpot(shrimpFraction);
 
-            } // end of fractions loop
+                } // end of fractions loop
 
-            finishSpeciesReportFiles();
-            finishRatiosReportFiles();
+                finishSpeciesReportFiles();
+                finishRatiosReportFiles();
+            }
         }
     }
 
@@ -160,14 +162,12 @@ public class CalamariReportsEngine {
 
             double[] countTimeSec = shrimpFraction.getCountTimeSec();
             for (int i = 0; i < rawPeakData[scanNum].length; i++) {
-                try {
-                    if ((i % countOfPeaks) == 0) {
-                        dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
-                    }
-                    dataLine.append(", ").append(rawPeakData[scanNum][i]);
-                } catch (Exception e) {
-                    System.out.println();
+
+                if ((i % countOfPeaks) == 0) {
+                    dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
                 }
+                dataLine.append(", ").append(rawPeakData[scanNum][i]);
+
             }
 
             Files.write(ionIntegrations_PerScan.toPath(), asList(dataLine), APPEND);
@@ -392,7 +392,7 @@ public class CalamariReportsEngine {
     }
 
     private void prepSpeciesReportFiles(ShrimpFraction shrimpFraction) throws IOException {
-        String nameOfMount = shrimpFraction.getNameOfMount();
+
         String[] namesOfSpecies = shrimpFraction.getNamesOfSpecies();
         int countOfIntegrations = shrimpFraction.getPeakMeasurementsCount();
 

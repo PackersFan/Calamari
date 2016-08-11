@@ -35,7 +35,7 @@ public class MacOSAboutHandler extends Application {
     }
 
     @SuppressWarnings("deprecation")
-    class AboutBoxHandler extends ApplicationAdapter {
+    static class AboutBoxHandler extends ApplicationAdapter {
 
         @Override
         public void handleAbout(ApplicationEvent event) {

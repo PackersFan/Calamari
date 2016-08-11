@@ -46,7 +46,7 @@ public final class TukeyBiweight {
         for (int i = 0; i < values.length; i++) {
             deviations[i] = StrictMath.abs(values[i] - mean.doubleValue());
         }
-        BigDecimal sigma = new BigDecimal(calculateMedian(deviations)).max(new BigDecimal(SQUID_TINY_VALUE));
+        BigDecimal sigma = new BigDecimal(calculateMedian(deviations)).max(new BigDecimal(String.valueOf(SQUID_TINY_VALUE)));
 
         BigDecimal previousMean;
         BigDecimal previousSigma;
@@ -78,7 +78,7 @@ public final class TukeyBiweight {
             }
 
             sigma = bigDecimalSqrtBabylonian(sa.multiply(new BigDecimal(n))).divide(sb.abs(), MathContext.DECIMAL128);
-            sigma = sigma.max(new BigDecimal(SQUID_TINY_VALUE));
+            sigma = sigma.max(new BigDecimal(String.valueOf(SQUID_TINY_VALUE)));
             mean = previousMean.add(tee.multiply(sc).divide(sb, MathContext.DECIMAL128));
 
         } // both tests against epsilon must pass OR iterations top out

@@ -16,6 +16,7 @@
 package org.cirdles.calamari.prawn;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  *
@@ -49,7 +50,7 @@ public class PrawnFileFilter extends javax.swing.filechooser.FileFilter {
         int i = s.lastIndexOf('.');
 
         if (i > 0 && i < s.length() - 1) {
-            suffix = s.substring(i + 1).toLowerCase();
+            suffix = s.substring(i + 1).toLowerCase(Locale.US);
         }
 
         return suffix;

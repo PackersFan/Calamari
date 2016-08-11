@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
@@ -108,7 +109,7 @@ public class PrawnFileRunFractionParser {
 
             // determine reference material status
             // hard coded for now
-            if (fractionID.toUpperCase().startsWith("T")) {
+            if (fractionID.toUpperCase(Locale.US).startsWith("T")) {
                 shrimpFraction.setReferenceMaterial(true);
             }
         }

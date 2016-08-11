@@ -42,18 +42,24 @@ public class Calamari {
         ResourceExtractor calamariResourceExtractor
                 = new ResourceExtractor(Calamari.class);
 
-        String version;
-        String releaseDate;
+        String version = "";
+        String releaseDate = "";
 
         // get version number and release date written by pom.xml
         Path resourcePath = calamariResourceExtractor.extractResourceAsPath("version.txt");
         Charset charset = Charset.forName("US-ASCII");
         try (BufferedReader reader = Files.newBufferedReader(resourcePath, charset)) {
-            String[] versionText = reader.readLine().split("=");
-            version = versionText[1];
+            String line = reader.readLine();
+            if (line != null) {
+                String[] versionText = line.split("=");
+                version = versionText[1];
+            }
 
-            String[] versionDate = reader.readLine().split("=");
-            releaseDate = versionDate[1];
+            line = reader.readLine();
+            if (line != null) {
+                String[] versionDate = line.split("=");
+                releaseDate = versionDate[1];
+            }
         } catch (IOException x) {
             version = "version";
             releaseDate = "date";
@@ -78,29 +84,33 @@ public class Calamari {
         Path listOfPrawnFiles = prawnFileResourceExtractor.extractResourceAsPath("listOfPrawnFiles.txt");
         if (listOfPrawnFiles != null) {
             File exampleFolder = new File("ExamplePrawnXMLFiles");
-            exampleFolder.mkdir();
-            try {
-                List<String> fileNames = Files.readAllLines(listOfPrawnFiles, ISO_8859_1);
-                for (int i = 0; i < fileNames.size(); i++) {
-                    // test for empty string
-                    if (fileNames.get(i).trim().length() > 0) {
-                        File prawnFileResource = prawnFileResourceExtractor.extractResourceAsFile(fileNames.get(i));
-                        File prawnFile = new File(exampleFolder.getCanonicalPath() + File.separator + fileNames.get(i));
-                        System.out.println("PrawnFile added: " + fileNames.get(i));
-                        prawnFileResource.renameTo(prawnFile);
+            boolean success = exampleFolder.mkdir();
+            if (success) {
+                try {
+                    List<String> fileNames = Files.readAllLines(listOfPrawnFiles, ISO_8859_1);
+                    for (int i = 0; i < fileNames.size(); i++) {
+                        // test for empty string
+                        if (fileNames.get(i).trim().length() > 0) {
+                            File prawnFileResource = prawnFileResourceExtractor.extractResourceAsFile(fileNames.get(i));
+                            File prawnFile = new File(exampleFolder.getCanonicalPath() + File.separator + fileNames.get(i));
+                            System.out.println("PrawnFile added: " + fileNames.get(i));
+                            boolean success2 = prawnFileResource.renameTo(prawnFile);
+                        }
                     }
-                }
 
-                // point to directory, but no default choice
-                prawnFileHandler.setCurrentPrawnFileLocation(exampleFolder.getCanonicalPath());
-            } catch (IOException iOException) {
+                    // point to directory, but no default choice
+                    prawnFileHandler.setCurrentPrawnFileLocation(exampleFolder.getCanonicalPath());
+                } catch (IOException iOException) {
+                }
             }
         }
 
         // Set up default folder for reports
         File defaultCalamariReportsFolder = new File("CalamariReports_v" + VERSION);
-        defaultCalamariReportsFolder.mkdir();
-        prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(defaultCalamariReportsFolder);
+        boolean success = defaultCalamariReportsFolder.mkdir();
+        if (success){
+            prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(defaultCalamariReportsFolder);
+        }
 
         /* Set the Metal look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

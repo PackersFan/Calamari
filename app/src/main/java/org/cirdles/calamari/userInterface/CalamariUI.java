@@ -15,12 +15,12 @@
  */
 package org.cirdles.calamari.userInterface;
 
-import com.apple.eawt.Application;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -35,7 +35,7 @@ import org.cirdles.calamari.prawn.PrawnFileFilter;
  */
 public class CalamariUI extends javax.swing.JFrame {
 
-    private final PrawnFileHandler prawnFileHandler;
+    private final transient PrawnFileHandler prawnFileHandler;
     private boolean normalizeIonCountsToSBM;
     private boolean useLinearRegressionToCalculateRatios;
 
@@ -61,10 +61,10 @@ public class CalamariUI extends javax.swing.JFrame {
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("SansSerif", Font.PLAIN, 12));
 
         // check for MacOS
-        String lcOSName = System.getProperty("os.name").toLowerCase();
+        String lcOSName = System.getProperty("os.name").toLowerCase(Locale.US);
         boolean MAC_OS_X = lcOSName.startsWith("mac os x");
         if (MAC_OS_X) {
-            Application myAboutHandler = new MacOSAboutHandler();
+            new MacOSAboutHandler();
         }
 
         // center me
@@ -363,7 +363,7 @@ public class CalamariUI extends javax.swing.JFrame {
     private void selectReportsLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectReportsLocationButtonActionPerformed
         CalamariReportsEngine reportsEngine = prawnFileHandler.getReportsEngine();
         File reportFolder
-                = FileHelper.AllPlatformGetFolder("Select location to write reports",
+                = FileHelper.allPlatformGetFolder("Select location to write reports",
                         reportsEngine.getFolderToWriteCalamariReports());
         if (reportFolder != null) {
             reportsEngine.setFolderToWriteCalamariReports(reportFolder);
@@ -373,7 +373,7 @@ public class CalamariUI extends javax.swing.JFrame {
 
     private void selectPrawnFileLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPrawnFileLocationButtonActionPerformed
 
-        File prawnFile = FileHelper.AllPlatformGetFile(//
+        File prawnFile = FileHelper.allPlatformGetFile(//
                 "Select Prawn file", //
                 new File(prawnFileHandler.getCurrentPrawnFileLocation()), //
                 "*.xml", new PrawnFileFilter(), false, this)[0];

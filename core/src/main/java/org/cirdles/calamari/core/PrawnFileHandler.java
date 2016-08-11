@@ -167,7 +167,10 @@ public class PrawnFileHandler {
         
         // delete tempURLtoXML.xml 
         if (isURL){
-            pathToLocalPrawnXMLFile.toFile().delete();
+            boolean success = pathToLocalPrawnXMLFile.toFile().delete();
+            if (! success){
+                throw new IOException("Could not delete temp file tempURLtoXML.xml");
+            }
         }
 
         // remove header up to <software tag
@@ -194,7 +197,10 @@ public class PrawnFileHandler {
         File prawnDataFile = new File(tempPrawnXMLFileName);
         myPrawnFile = readRawDataFile(prawnDataFile);
 
-        prawnDataFile.delete();
+        boolean success = prawnDataFile.delete();
+        if(!success){
+            throw new IOException("Unable to delete empPrawnXMLFileName.xml");
+        }
 
         return myPrawnFile;
     }
